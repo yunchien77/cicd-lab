@@ -28,10 +28,34 @@ jobs:
         run: npm ci
 
       - name: TypeScript typecheck
-        run: npm run typecheck
+        run: |
+          npm run typecheck 2>&1 | tee typecheck-output.txt
+          exit ${PIPESTATUS[0]}
+        shell: bash
+
+      - name: TypeScript typecheck summary
+        if: failure()
+        run: |
+          echo "## ❌ TypeScript Typecheck Failed" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat typecheck-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
       - name: Prettier check
-        run: npm run format:check
+        run: |
+          npm run format:check 2>&1 | tee prettier-output.txt
+          exit ${PIPESTATUS[0]}
+        shell: bash
+
+      - name: Prettier check summary
+        if: failure()
+        run: |
+          echo "## ❌ Prettier Check Failed" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat prettier-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
       - name: Run tests
         run: |
@@ -40,7 +64,7 @@ jobs:
 
       - name: Publish test results
         uses: mikepenz/action-junit-report@v4
-        if: always() # Show report even if tests fail
+        if: always()
         with:
           report_paths: reports/vitest-junit.xml
           fail_on_failure: true
