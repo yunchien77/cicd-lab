@@ -23,4 +23,4 @@ export function buildApp(options: FastifyServerOptions = {}) {
 }
 
 // const x: number = 'error'; // type error
-const msg = "prettier check"; // prettier error
+// const msg = "prettier check"; // prettier error
