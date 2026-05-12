@@ -35,9 +35,9 @@ jobs:
         shell: bash
 
       - name: TypeScript typecheck summary
-        if: failure() && steps.typecheck.outcome == 'failure'
+        if: always() && steps.typecheck.outcome == 'failure'
         run: |
-          echo "## ❌ TypeScript Typecheck Failed" >> $GITHUB_STEP_SUMMARY
+          echo "### ❌ TypeScript Typecheck Failed" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat typecheck-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
@@ -54,13 +54,15 @@ jobs:
       - name: Prettier check summary
         if: always() && steps.prettier.outcome == 'failure'
         run: |
-          echo "## ❌ Prettier Check Failed" >> $GITHUB_STEP_SUMMARY
+          echo "### ❌ Prettier Check Failed" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat prettier-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
         shell: bash
 
       - name: Run tests
+        id: tests
+        if: always()
         run: |
           mkdir -p reports
           npm test -- --reporter=default --reporter=junit --outputFile.junit=reports/vitest-junit.xml
