@@ -36,7 +36,7 @@ jobs:
       - name: TypeScript typecheck summary
         if: failure()
         run: |
-          echo "## ❌ TypeScript Typecheck Failed" >> $GITHUB_STEP_SUMMARY
+          echo "### ❌ TypeScript Typecheck Failed" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat typecheck-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
@@ -51,7 +51,7 @@ jobs:
       - name: Prettier check summary
         if: failure()
         run: |
-          echo "## ❌ Prettier Check Failed" >> $GITHUB_STEP_SUMMARY
+          echo "### ❌ Prettier Check Failed" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat prettier-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
